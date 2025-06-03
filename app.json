@@ -1,0 +1,63 @@
+{
+  "expo": {
+    "name": "appAnemiaCal",
+    "slug": "appAnemiaCal",
+    "version": "1.0.0",
+    "scheme": ["appanemiacal"],
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-dev-launcher",
+        {
+          "launchMode": "most-recent"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 35,
+            "targetSdkVersion": 35,
+            "buildToolsVersion": "35.0.0"
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "tsconfigPaths": true
+    },
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.andrezaleal.anemiacal",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "20b494ad-b953-4330-917f-4a04f85417ca"
+      }
+    }
+  }
+}

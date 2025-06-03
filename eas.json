@@ -1,0 +1,36 @@
+{
+  "cli": {
+    "version": ">= 3.13.0",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "image": "latest"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "image": "latest"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "apk",
+        "image": "latest"
+      }
+    },
+    "release": {
+      "android": {
+        "buildType": "apk",
+        "image": "latest"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
