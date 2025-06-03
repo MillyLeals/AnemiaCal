@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface BackButtonProps {
-  style?: ViewStyle; // Adicionando suporte a um estilo customizável
+  style?: ViewStyle; 
 }
 
 const BackButton: React.FC<BackButtonProps> = ({ style }) => {

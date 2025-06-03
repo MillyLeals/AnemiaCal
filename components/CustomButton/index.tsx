@@ -5,13 +5,13 @@ interface CustomButtonProps {
   text: string;
   onPress: () => void;
   disabled?: boolean;
-  style?: ViewStyle; // Permite passar estilos adicionais
+  style?: ViewStyle; 
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({ text, onPress, disabled = false, style }) => {
   return (
     <TouchableOpacity
-      style={[styles.button, style, { opacity: disabled ? 0.5 : 1 }]} // Aplica o estilo adicional
+      style={[styles.button, style, { opacity: disabled ? 0.5 : 1 }]} 
       onPress={onPress}
       disabled={disabled}
     >

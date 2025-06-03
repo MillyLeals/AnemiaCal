@@ -14,8 +14,8 @@ import {
 type InfoLinkButtonProps = {
   title: string;
   contentText: string;
-  modalTitle?: string; // opcional, default "Informativo"
-  style?: StyleProp<ViewStyle>; // estilo extra para o TouchableOpacity
+  modalTitle?: string; 
+  style?: StyleProp<ViewStyle>; 
 };
 
 export default function InfoLinkButton({
@@ -60,8 +60,6 @@ const styles = StyleSheet.create({
     color: '#F46F6F',
     textDecorationLine: 'underline',
     fontWeight: '600',
-    // marginTop removido para alinhar em linha
-    // textAlign removido para alinhamento lado a lado
   },
   modalBackdrop: {
     flex: 1,
