@@ -4,15 +4,19 @@ import {
   Text,
   TextInput,
   SafeAreaView,
-  Alert,
+  Alert,        
   TouchableOpacity,
   StyleSheet,
+  Dimensions, 
+  Platform,   
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import CustomButton from '../components/CustomButton';
 
-import { auth } from '../lib/firebaseConfig'; 
+import { auth } from '../lib/firebaseConfig';
 import { sendPasswordResetEmail } from 'firebase/auth';
+
+const { height, width } = Dimensions.get('window');
 
 export default function CreateNewPasswordScreen() {
   const [email, setEmail] = useState('');
@@ -85,50 +89,52 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   header: {
-    paddingTop: 80,
-    paddingBottom: 30,
-    paddingHorizontal: 30,
+    paddingTop: Platform.OS === 'ios' ? height * 0.1 : height * 0.08,
+    paddingBottom: height * 0.03,
+    paddingHorizontal: width * 0.08, 
     backgroundColor: '#fff',
   },
   title: {
-    fontSize: 26,
+    fontSize: width * 0.07,
     fontWeight: 'bold',
     color: '#000',
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: width * 0.035, 
     color: '#555',
-    marginTop: 8,
+    marginTop: height * 0.01, 
   },
   container: {
     flex: 1,
     backgroundColor: '#F46F6F',
-    borderTopLeftRadius: 45,
-    borderTopRightRadius: 45,
-    paddingHorizontal: 30,
-    paddingTop: 60,
+    borderTopLeftRadius: width * 0.1, 
+    borderTopRightRadius: width * 0.1, 
+    paddingHorizontal: width * 0.08, 
+    paddingTop: height * 0.07,
     alignItems: 'center',
   },
   input: {
     width: '100%',
-    height: 44,
+    height: height * 0.055, 
     borderBottomWidth: 1,
     borderColor: '#fff',
     color: '#fff',
-    marginBottom: 40,
-    paddingHorizontal: 8,
+    marginBottom: height * 0.05, 
+    paddingHorizontal: width * 0.02, 
+    fontSize: width * 0.04, 
   },
   button: {
     backgroundColor: '#fff',
-    borderRadius: 20,
-    paddingVertical: 14,
+    borderRadius: width * 0.05, 
+    paddingVertical: height * 0.018, 
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
+    width: '100%', 
   },
   backLink: {
     color: '#fff',
-    fontSize: 13,
+    fontSize: width * 0.035,
     textDecorationLine: 'underline',
+    marginTop: height * 0.02,
   },
 });

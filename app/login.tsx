@@ -8,6 +8,8 @@ import {
   SafeAreaView,
   Alert,
   ActivityIndicator,
+  Dimensions,
+  Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -18,6 +20,8 @@ import { Ionicons } from '@expo/vector-icons';
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const showError = (message: string) => Alert.alert('Erro', message);
+
+const { height, width } = Dimensions.get('window');
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -99,7 +103,7 @@ export default function LoginScreen() {
             >
               <Ionicons
                 name={showPassword ? "eye-off" : "eye"}
-                size={24}
+                size={width * 0.06}
                 color="#fff"
               />
             </TouchableOpacity>
@@ -138,83 +142,85 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   header: {
-    paddingTop: 80,
-    paddingBottom: 60,
+    paddingTop: Platform.OS === 'ios' ? height * 0.1 : height * 0.08,
+    paddingBottom: height * 0.08,
     alignItems: 'flex-start',
     backgroundColor: '#fff',
-    paddingHorizontal: 30,
+    paddingHorizontal: width * 0.08,
   },
   title: {
-    fontSize: 26,
+    fontSize: width * 0.07,
     fontWeight: 'bold',
     color: '#000',
   },
   container: {
     flex: 1,
     backgroundColor: '#F46F6F',
-    borderTopLeftRadius: 45,
-    borderTopRightRadius: 45,
-    paddingHorizontal: 30,
-    paddingTop: 40,
+    borderTopLeftRadius: width * 0.1,
+    borderTopRightRadius: width * 0.1,
+    paddingHorizontal: width * 0.08,
+    paddingTop: height * 0.05,
     justifyContent: 'space-between',
   },
   contentWrapper: {
-    marginTop: 100,
+    marginTop: height * 0.05,
   },
   input: {
-    height: 44,
+    height: height * 0.055,
     borderBottomWidth: 1,
     borderColor: '#fff',
     color: '#fff',
-    paddingRight: 40, 
-    paddingHorizontal: 8,
-    paddingVertical: 10,
-    marginBottom: 24,
+    paddingRight: width * 0.1, 
+    paddingHorizontal: width * 0.02,
+    paddingVertical: height * 0.012,
+    marginBottom: height * 0.03,
+    fontSize: width * 0.045,
   },
   passwordContainer: {
-    position: 'relative', 
+    position: 'relative',
+    marginBottom: height * 0.03,
   },
   showPasswordButton: {
     position: 'absolute',
     right: 0,
-    bottom: 25,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    bottom: height * 0.035, 
+    paddingHorizontal: width * 0.025,
+    paddingVertical: height * 0.005,
   },
   link: {
     textAlign: 'right',
     color: '#fff',
-    marginBottom: 30,
-    fontSize: 12,
+    marginBottom: height * 0.03,
+    fontSize: width * 0.035,
     fontWeight: 'bold',
     textDecorationLine: 'underline',
   },
   button: {
     backgroundColor: '#fff',
-    borderRadius: 20,
-    paddingVertical: 14,
+    borderRadius: width * 0.05,
+    paddingVertical: height * 0.018,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    marginBottom: 20,
+    marginBottom: height * 0.025,
     elevation: 5,
   },
   loadingIndicator: {
-    marginBottom: 40,
+    marginBottom: height * 0.05,
   },
   registerContainer: {
     alignItems: 'center',
-    gap: 6,
-    marginBottom: 60,
+    gap: height * 0.008,
+    marginBottom: height * 0.06,
   },
   registerText: {
     color: '#fff',
-    fontSize: 13,
-    marginBottom: 2,
+    fontSize: width * 0.038,
+    marginBottom: height * 0.002,
   },
   linkHighlight: {
     color: '#fff',
-    fontSize: 13,
+    fontSize: width * 0.038,
     fontWeight: 'bold',
     textDecorationLine: 'underline',
   },

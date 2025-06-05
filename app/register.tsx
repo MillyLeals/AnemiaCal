@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
   StyleSheet, SafeAreaView, ScrollView,
-  Alert, ActivityIndicator, KeyboardAvoidingView, Platform
+  Alert, ActivityIndicator, KeyboardAvoidingView, Platform,
+  Dimensions, 
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { auth, db } from '../lib/firebaseConfig'; 
+import { auth, db } from '../lib/firebaseConfig';
+
+const { height, width } = Dimensions.get('window');
 
 export default function RegisterScreen() {
   const [formData, setFormData] = useState({
@@ -112,7 +115,7 @@ export default function RegisterScreen() {
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? height * 0.1 : 0} 
       >
         <View style={styles.header}>
           <Text style={styles.title}>Crie sua conta</Text>
@@ -186,7 +189,7 @@ export default function RegisterScreen() {
             />
 
             {loading ? (
-              <ActivityIndicator size="large" color="#fff" style={{ marginTop: 20 }} />
+              <ActivityIndicator size="large" color="#fff" style={styles.loadingIndicator} />
             ) : (
               <TouchableOpacity style={styles.button} onPress={handleRegister}>
                 <Text style={styles.buttonText}>CADASTRAR</Text>
@@ -205,44 +208,63 @@ export default function RegisterScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: '#fff' },
-  header: { paddingTop: 80, paddingBottom: 60, alignItems: 'flex-start', backgroundColor: '#fff', paddingHorizontal: 30 },
-  title: { fontSize: 26, fontWeight: 'bold', color: '#000' },
+  header: {
+    paddingTop: Platform.OS === 'ios' ? height * 0.1 : height * 0.08, 
+    paddingBottom: height * 0.08, 
+    alignItems: 'flex-start',
+    backgroundColor: '#fff',
+    paddingHorizontal: width * 0.08, 
+  },
+  title: {
+    fontSize: width * 0.07, 
+    fontWeight: 'bold',
+    color: '#000',
+  },
   container: {
     flex: 1,
     backgroundColor: '#F46F6F',
-    borderTopLeftRadius: 45,
-    borderTopRightRadius: 45,
-    paddingHorizontal: 30,
-    paddingTop: 40,
+    borderTopLeftRadius: width * 0.1, 
+    borderTopRightRadius: width * 0.1,
+    paddingHorizontal: width * 0.08, 
+    paddingTop: height * 0.05, 
   },
-  scrollContent: { paddingBottom: 40 },
+  scrollContent: {
+    paddingBottom: height * 0.05, 
+  },
   input: {
-    height: 44,
+    height: height * 0.055, 
     borderBottomWidth: 1,
     borderColor: '#fff',
     color: '#fff',
-    marginBottom: 24,
-    paddingHorizontal: 8,
-    paddingVertical: 10,
+    marginBottom: height * 0.03, 
+    paddingHorizontal: width * 0.02, 
+    paddingVertical: height * 0.01, 
+    fontSize: width * 0.04, 
   },
   button: {
     backgroundColor: '#fff',
-    borderRadius: 20,
-    paddingVertical: 14,
+    borderRadius: width * 0.05,
+    paddingVertical: height * 0.018,
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: height * 0.025,
     elevation: 5,
+    width: '100%', 
   },
   buttonText: {
     color: '#004AAD',
     fontWeight: 'bold',
+    fontSize: width * 0.042, 
   },
   backLink: {
     textAlign: 'center',
     color: '#fff',
-    fontSize: 13,
+    fontSize: width * 0.035,
     fontWeight: 'bold',
     textDecorationLine: 'underline',
-    marginTop: 24,
+    marginTop: height * 0.03, 
+  },
+  loadingIndicator: {
+    marginTop: height * 0.025, 
+    marginBottom: height * 0.03, 
   },
 });
