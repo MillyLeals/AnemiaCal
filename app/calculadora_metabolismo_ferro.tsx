@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#fff',
-    fontSize: width * 0.06,
+    fontSize: width * 0.055,
     fontWeight: '600',
     textAlign: 'center',
   },

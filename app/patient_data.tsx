@@ -245,10 +245,10 @@ const styles = StyleSheet.create({
     zIndex: 2, 
   },
   title: {
-    fontSize: width * 0.06, 
-    fontWeight: 'bold',
-    color: '#ffffff',
-    marginTop: height * 0.01, 
+    color: '#fff',
+    fontSize: width * 0.055,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   scrollViewContent: { 
     padding: width * 0.05, 

@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   headerTitle: {
-    color: '#fff',
-    fontSize: width * 0.06,
+     color: '#fff',
+    fontSize: width * 0.055,
     fontWeight: '600',
     textAlign: 'center',
   },
