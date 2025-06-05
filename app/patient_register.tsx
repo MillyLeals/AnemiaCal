@@ -112,7 +112,7 @@ export default function PatientRegister() {
     const user = auth.currentUser;
     if (!user) {
       Alert.alert('Erro', 'Usuário não autenticado');
-      return null; 
+      return null;
     }
 
     try {
@@ -190,7 +190,7 @@ export default function PatientRegister() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={{ flex: 1 }}
     >
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView contentContainerStyle={styles.container} style={styles.scrollViewFill}> 
         <View style={styles.header}>
           <BackButton />
           <Text style={styles.headerTitle}>Cadastro de Paciente</Text>
@@ -269,6 +269,10 @@ const styles = StyleSheet.create({
   container: {
     paddingBottom: 30,
     backgroundColor: '#fff',
+    flexGrow: 1, 
+  },
+  scrollViewFill: { 
+    flex: 1,
   },
   header: {
     backgroundColor: '#F46F6F',
@@ -288,29 +292,28 @@ const styles = StyleSheet.create({
   },
   form: {
     marginTop: 10,
-paddingHorizontal: 20,
-
+    paddingHorizontal: 20,
   },
   label: {
-  fontWeight: '600',
-  fontSize: 16,
-  marginTop: 15,
+    fontWeight: '600',
+    fontSize: 16,
+    marginTop: 15,
   },
   input: {
-  borderWidth: 1,
-  borderColor: '#CCC',
-  borderRadius: 10,
-  padding: 10,
-  marginTop: 5,
-  fontSize: 16,
+    borderWidth: 1,
+    borderColor: '#CCC',
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 5,
+    fontSize: 16,
   },
   ageText: {
-  marginTop: 5,
-  fontSize: 14,
-  color: '#666',
+    marginTop: 5,
+    fontSize: 14,
+    color: '#666',
   },
   bottomButtons: {
-  marginTop: 30,
-  alignItems: 'center',
+    marginTop: 30,
+    alignItems: 'center',
   },
 });
