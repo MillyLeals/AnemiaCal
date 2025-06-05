@@ -95,7 +95,7 @@ export default function CalculatorIGK() {
         patientId: patientId,
         hb: parseFloat(hb.replace(',', '.')),
         rdw: parseFloat(rdw.replace(',', '.')),
-        rbc: parseFloat(rbc.replace(',', '.')),
+        rbc: parseFloat(rbc.replace(',', '.')), 
         vcm: parseFloat(vcm.replace(',', '.')),
         principioContagem: principio,
         igk: resultado.igk,
@@ -199,7 +199,7 @@ export default function CalculatorIGK() {
         </View>
 
         <View style={styles.bottomButtons}>
-          <BorderedButton title="CALCULAR" onPress={handleCalculate} />
+          <BorderedButton title="CALCULAR" onPress={handleCalculate} style={styles.fullWidthButton} />
         </View>
 
         {resultado && (
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#fff',
-    fontSize: width * 0.055,
+    fontSize: width * 0.06,
     fontWeight: '600',
     textAlign: 'center',
   },
@@ -316,7 +316,10 @@ const styles = StyleSheet.create({
   },
   bottomButtons: {
     marginTop: height * 0.04,
-    alignItems: 'center',
+    alignItems: 'center', 
+  },
+  fullWidthButton: {
+    width: '100%', 
   },
   resultBox: {
     marginTop: height * 0.04,
@@ -343,6 +346,7 @@ const styles = StyleSheet.create({
     marginTop: height * 0.025,
     backgroundColor: '#F46F6F',
     paddingVertical: height * 0.015,
+    paddingHorizontal: width * 0.17,
     borderRadius: width * 0.02,
     alignItems: 'center',
   },

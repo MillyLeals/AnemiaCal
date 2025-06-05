@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import { router } from 'expo-router';
-import BorderedButton from '../components/BorderedButton';
+import BorderedButton from '../components/BorderedButton'; 
 import BackButton from '../components/BackButton';
 
 const { height, width } = Dimensions.get('window');
@@ -92,7 +92,7 @@ export default function Calculator() {
         {age !== '' && <Text style={styles.ageText}>{age} anos</Text>}
 
         <View style={styles.buttonContainer}>
-          <BorderedButton title="INICIAR CALCULADORA" onPress={handleStartCalculator} />
+          <BorderedButton title="INICIAR CALCULADORA" onPress={handleStartCalculator} style={styles.fullWidthButton} />
         </View>
 
         <View style={styles.linksContainer}>
@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   headerTitle: {
-     color: '#fff',
-    fontSize: width * 0.055,
+    color: '#fff',
+    fontSize: width * 0.06,
     fontWeight: '600',
     textAlign: 'center',
   },
@@ -176,7 +176,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: height * 0.06,
-    alignItems: 'center',
+    alignItems: 'center', 
+  },
+  fullWidthButton: {
+    width: '100%', 
   },
   linksContainer: {
     marginTop: height * 0.05,

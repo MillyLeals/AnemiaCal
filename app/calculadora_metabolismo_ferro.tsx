@@ -6,12 +6,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions, 
-  Platform,  
+  Platform,   
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import BackButton from '../components/BackButton';
-import BorderedButton from '../components/BorderedButton'; 
+import BorderedButton from '../components/BorderedButton';
 
 const { height, width } = Dimensions.get('window');
 
@@ -76,8 +76,8 @@ export default function CalculadoraMetabolismoFerro() {
           </Picker>
         </View>
 
-        <View style={styles.buttonContainer}> 
-          <BorderedButton title="CALCULAR" onPress={calcularResultado} />
+        <View style={styles.buttonContainer}>
+          <BorderedButton title="CALCULAR" onPress={calcularResultado} style={styles.buttonFullWidth} /> 
         </View>
 
         {resultado && (
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#fff',
-    fontSize: width * 0.055,
+    fontSize: width * 0.06,
     fontWeight: '600',
     textAlign: 'center',
   },
@@ -148,42 +148,45 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   buttonContainer: {
-    marginTop: height * 0.04, 
-    alignItems: 'center',
+    marginTop: height * 0.04,
+    alignItems: 'center', 
+  },
+  buttonFullWidth: {
+    width: '100%',
   },
   resultContainer: {
-    marginTop: height * 0.04, 
-    padding: width * 0.05, 
+    marginTop: height * 0.04,
+    padding: width * 0.05,
     backgroundColor: '#ffeaea',
-    borderRadius: width * 0.025, 
+    borderRadius: width * 0.025,
     borderColor: '#f46f6f',
     borderWidth: 1,
   },
   resultLabel: {
-    fontSize: width * 0.045, 
+    fontSize: width * 0.045,
     fontWeight: '700',
-    marginBottom: height * 0.015, 
+    marginBottom: height * 0.015,
     color: '#c62828',
   },
   resultText: {
     fontSize: width * 0.04,
     color: '#333',
-    marginBottom: height * 0.025, 
-    lineHeight: width * 0.055, 
+    marginBottom: height * 0.025,
+    lineHeight: width * 0.055,
   },
   homeButton: {
-    marginTop: height * 0.025, 
+    marginTop: height * 0.025,
     backgroundColor: '#f46f6f',
-    paddingVertical: height * 0.015, 
+    paddingVertical: height * 0.015,
     paddingHorizontal: width * 0.05,
     borderRadius: width * 0.02,
     alignItems: 'center',
-    alignSelf: 'stretch',
+    alignSelf: 'stretch', 
   },
   homeButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: width * 0.04, 
+    fontSize: width * 0.04,
     textTransform: 'uppercase',
   },
 });

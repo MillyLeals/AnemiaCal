@@ -9,15 +9,15 @@ import {
   Alert,
   Dimensions,
   ActivityIndicator,
-  Platform, 
+  Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../lib/firebaseConfig';
-import BackButton from '../components/BackButton/index'; 
+import BackButton from '../components/BackButton/index';
 import BorderedButton from '../components/BorderedButton';
 
-const { height, width } = Dimensions.get('window'); 
+const { height, width } = Dimensions.get('window');
 
 export default function Opcoes() {
   const router = useRouter();
@@ -32,7 +32,6 @@ export default function Opcoes() {
   const [alterado, setAlterado] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Buscar dados do usuário no Firestore
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -150,11 +149,13 @@ export default function Opcoes() {
           </View>
         ))}
 
-        <BorderedButton title="ALTERAR SENHA" onPress={() => router.push('/createNewPassword')} />
+        <View style={styles.buttonGroupContainer}>
+          <BorderedButton title="ALTERAR SENHA" onPress={() => router.push('/createNewPassword')} style={styles.buttonFullWidth} />
 
-        {alterado && <BorderedButton title="SALVAR" onPress={handleSalvar} />}
+          {alterado && <BorderedButton title="SALVAR" onPress={handleSalvar} style={styles.buttonFullWidth} />}
+        </View>
 
-        <TouchableOpacity onPress={handleSair}>
+        <TouchableOpacity onPress={handleSair} style={styles.logoutTextContainer}>
           <Text style={styles.sairTexto}>Sair da conta</Text>
         </TouchableOpacity>
       </View>
@@ -164,13 +165,13 @@ export default function Opcoes() {
 
 const styles = StyleSheet.create({
   scrollContent: {
-    paddingBottom: height * 0.04, 
-    backgroundColor: '#fff', 
-    flexGrow: 1, 
+    paddingBottom: height * 0.04,
+    backgroundColor: '#fff',
+    flexGrow: 1,
   },
   scrollViewFill: {
     flex: 1,
-    backgroundColor: '#fff', 
+    backgroundColor: '#fff',
   },
   loadingContainer: {
     flex: 1,
@@ -180,51 +181,63 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#F46F6F',
-    height: Platform.OS === 'ios' ? height * 0.12 : height * 0.1, 
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    paddingTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.03, 
+    height: Platform.OS === 'ios' ? height * 0.12 : height * 0.1,
+    borderBottomLeftRadius: width * 0.08, 
+    borderBottomRightRadius: width * 0.08,
+    paddingTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.03,
     paddingHorizontal: width * 0.05,
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backButtonPosition: {
     position: 'absolute',
     left: width * 0.05,
-    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.04, 
-    zIndex: 1, 
+    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.03,
+    zIndex: 1,
   },
   headerTitle: {
     color: '#fff',
-    fontSize: width * 0.055, 
+    fontSize: width * 0.055,
     fontWeight: '600',
     textAlign: 'center',
   },
   form: {
-    paddingHorizontal: width * 0.05, 
-    paddingTop: height * 0.03, 
+    paddingHorizontal: width * 0.05,
+    paddingTop: height * 0.03,
   },
   inputWrapper: {
-    marginBottom: height * 0.02, 
-    width: '100%',
+    marginBottom: height * 0.02,
+    width: '100%', 
   },
   label: {
     fontWeight: '600',
-    marginBottom: height * 0.005, 
+    marginBottom: height * 0.005,
     marginTop: height * 0.015,
-    fontSize: width * 0.038, 
+    fontSize: width * 0.038,
   },
   input: {
     borderBottomWidth: 1,
     borderColor: '#888',
-    paddingVertical: height * 0.008, 
+    paddingVertical: height * 0.008,
     fontSize: width * 0.04,
+  },
+  buttonGroupContainer: {
+    width: '100%', 
+    alignItems: 'center', 
+    marginTop: height * 0.03, 
+  },
+  buttonFullWidth: {
+    width: '100%', 
+    marginBottom: height * 0.015, 
+  },
+  logoutTextContainer: {
+    width: '100%', 
+    alignItems: 'center', 
+    marginTop: height * 0.04,
   },
   sairTexto: {
     color: '#004AAD',
-    fontSize: width * 0.04, 
+    fontSize: width * 0.04,
     fontWeight: '500',
-    alignSelf: 'center', 
-    marginTop: height * 0.04, 
   },
 });
