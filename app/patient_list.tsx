@@ -6,6 +6,9 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  Dimensions, 
+  Platform, 
+
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -20,6 +23,8 @@ interface Patient {
   cpf: string;
 }
 
+const { height, width } = Dimensions.get('window');
+
 const ITEMS_PER_PAGE = 5;
 
 export default function RegisteredPatients() {
@@ -30,6 +35,7 @@ export default function RegisteredPatients() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+
 
   useEffect(() => {
     async function fetchAndAddPatient() {
@@ -58,8 +64,8 @@ export default function RegisteredPatients() {
 
         if (params?.newPatient) {
           const newPatient: Patient = JSON.parse(params.newPatient as string);
-          const index = firebasePatients.findIndex(p => p.id === newPatient.id);
 
+          const index = firebasePatients.findIndex(p => p.id === newPatient.id);
           if (index === -1) {
             firebasePatients.push(newPatient);
           } else {
@@ -71,28 +77,36 @@ export default function RegisteredPatients() {
       } catch (error) {
         console.error('Erro ao buscar pacientes do Firebase:', error);
       }
+
     }
 
     fetchAndAddPatient();
-  }, [params?.newPatient]);
+  }, [params?.newPatient]); 
 
   useEffect(() => {
     setSelectedPatientId(null);
     setCurrentPage(1);
   }, [patients, searchTerm]);
 
-  const filteredAndSortedPatients = useMemo(() => {
-    return [...patients]
-      .filter((p) =>
+  const filteredPatients = useMemo(() => {
+    return patients.filter(
+      (p) =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.cpf.includes(searchTerm)
-      )
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [patients, searchTerm]);
+    );
+  }, [patients, searchTerm]); 
 
-  const maxPages = Math.ceil(filteredAndSortedPatients.length / ITEMS_PER_PAGE);
+  const sortedFilteredPatients = useMemo(() => {
+    return [...filteredPatients].sort((a, b) => a.name.localeCompare(b.name));
+  }, [filteredPatients]); 
+
+  const maxPages = Math.ceil(sortedFilteredPatients.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentPatients = filteredAndSortedPatients.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const currentPatients = sortedFilteredPatients.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
 
   const handleSelectPatient = (id: string) => {
     setSelectedPatientId((prev) => (prev === id ? null : id));
@@ -106,10 +120,15 @@ export default function RegisteredPatients() {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1);
   };
 
+  const handleSearchChange = (text: string) => {
+    setSearchTerm(text);
+    setCurrentPage(1);
+  };
+
   return (
     <View style={styles.screen}>
       <TouchableOpacity onPress={() => router.push('/home')} style={styles.backButton}>
-        <Ionicons name="arrow-back" size={32} color="#004AAD" />
+        <Ionicons name="arrow-back" size={width * 0.08} color="#004AAD" /> 
       </TouchableOpacity>
 
       <View style={styles.headerTitleContainer}>
@@ -121,7 +140,7 @@ export default function RegisteredPatients() {
           style={styles.addButton}
           onPress={() => router.push('/patient_register')}
         >
-          <Ionicons name="add-circle-outline" size={20} color="#fff" />
+          <Ionicons name="add-circle-outline" size={width * 0.05} color="#fff" />
           <Text style={styles.addButtonText}>Adicionar</Text>
         </TouchableOpacity>
         <TextInput
@@ -129,14 +148,14 @@ export default function RegisteredPatients() {
           placeholder="Buscar paciente"
           placeholderTextColor="#888"
           value={searchTerm}
-          onChangeText={setSearchTerm}
+          onChangeText={handleSearchChange}
         />
       </View>
 
       <FlatList
         data={currentPatients}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingBottom: 140 }}
+        contentContainerStyle={{ paddingBottom: height * 0.18 }}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => handleSelectPatient(item.id)}
@@ -147,9 +166,9 @@ export default function RegisteredPatients() {
           >
             <Ionicons
               name="ellipse-outline"
-              size={16}
+              size={width * 0.04} 
               color={selectedPatientId === item.id ? '#004AAD' : '#ccc'}
-              style={{ marginRight: 10 }}
+              style={styles.radioIcon} 
             />
             <View>
               <Text style={styles.patientName}>{item.name}</Text>
@@ -158,7 +177,7 @@ export default function RegisteredPatients() {
           </TouchableOpacity>
         )}
         ListEmptyComponent={
-          <Text style={{ textAlign: 'center', color: '#666', marginTop: 40 }}>
+          <Text style={styles.emptyListText}>
             {patients.length === 0
               ? 'Nenhum paciente cadastrado.'
               : 'Nenhum paciente encontrado.'}
@@ -166,23 +185,27 @@ export default function RegisteredPatients() {
         }
       />
 
-      <View style={styles.paginationContainer}>
-        <TouchableOpacity onPress={handlePreviousPage} disabled={currentPage === 1}>
-          <Ionicons
-            name="chevron-back"
-            size={24}
-            color={currentPage === 1 ? '#aaa' : '#004AAD'}
-          />
-        </TouchableOpacity>
-        <Text style={styles.pageNumber}>Página {currentPage}</Text>
-        <TouchableOpacity onPress={handleNextPage} disabled={currentPage >= maxPages}>
-          <Ionicons
-            name="chevron-forward"
-            size={24}
-            color={currentPage >= maxPages ? '#aaa' : '#004AAD'}
-          />
-        </TouchableOpacity>
-      </View>
+      {maxPages > 1 && ( 
+        <View style={styles.paginationContainer}>
+          <TouchableOpacity onPress={handlePreviousPage} disabled={currentPage === 1}>
+            <Ionicons
+              name="chevron-back"
+              size={width * 0.06} 
+              color={currentPage === 1 ? '#aaa' : '#004AAD'}
+            />
+          </TouchableOpacity>
+          <Text style={styles.pageNumber}>
+            Página {currentPage} de {maxPages}
+          </Text>
+          <TouchableOpacity onPress={handleNextPage} disabled={currentPage >= maxPages}>
+            <Ionicons
+              name="chevron-forward"
+              size={width * 0.06} 
+              color={currentPage >= maxPages ? '#aaa' : '#004AAD'}
+            />
+          </TouchableOpacity>
+        </View>
+      )}
 
       <CustomButton
         text="CONFIRMAR"
@@ -198,7 +221,7 @@ export default function RegisteredPatients() {
           }
         }}
         disabled={!selectedPatientId}
-        style={{ marginBottom: 80 }}
+        style={{ marginBottom: height * 0.08 }} 
       />
     </View>
   );
@@ -208,59 +231,62 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: '#f0f4ff',
-    paddingTop: 60,
-    paddingHorizontal: 20,
+    paddingHorizontal: width * 0.05, 
+    paddingTop: Platform.OS === 'ios' ? height * 0.08 : height * 0.04,
   },
   backButton: {
     position: 'absolute',
-    top: 45,
-    left: 20,
+    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.03, 
+    left: width * 0.05, 
     zIndex: 1,
   },
   headerTitleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 30,
-    marginBottom: 20,
+    marginTop: height * 0.04, 
+    marginBottom: height * 0.03, 
   },
   title: {
-    fontSize: 25,
+    fontSize: width * 0.06, 
     fontWeight: 'bold',
     color: '#004AAD',
+    textAlign: 'center',
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: height * 0.02, 
   },
   addButton: {
     flexDirection: 'row',
     backgroundColor: '#004AAD',
-    padding: 10,
-    borderRadius: 8,
-    marginRight: 10,
+    padding: width * 0.025,
+    borderRadius: width * 0.02, 
+    marginRight: width * 0.025, 
   },
   addButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    marginLeft: 6,
+    marginLeft: width * 0.015, 
+    fontSize: width * 0.035, 
   },
   searchInput: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: 12,
-    borderRadius: 8,
+    paddingHorizontal: width * 0.03, 
+    borderRadius: width * 0.02, 
     borderWidth: 1,
     borderColor: '#ccc',
-    height: 40,
+    height: height * 0.06, 
+    fontSize: width * 0.04, 
   },
   patientCard: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
-    padding: 16,
-    marginBottom: 10,
-    borderRadius: 10,
+    padding: width * 0.04, 
+    marginBottom: height * 0.015, 
+    borderRadius: width * 0.025, 
     borderWidth: 1,
     borderColor: '#ddd',
   },
@@ -268,25 +294,44 @@ const styles = StyleSheet.create({
     borderColor: '#004AAD',
     backgroundColor: '#eaf0ff',
   },
+  radioIcon: {
+    marginRight: width * 0.025,
+  },
   patientName: {
-    fontSize: 16,
+    fontSize: width * 0.045,
     fontWeight: 'bold',
     color: '#333',
   },
   patientCPF: {
-    fontSize: 14,
+    fontSize: width * 0.035, 
     color: '#666',
-    marginTop: 4,
+    marginTop: height * 0.005,
+  },
+
+  emptyListText: {
+    textAlign: 'center',
+    color: '#666',
+    marginTop: height * 0.05,
+    fontSize: width * 0.04,
   },
   paginationContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginBottom: 16,
+    marginTop: height * 0.02, 
+    marginBottom: height * 0.02, 
   },
   pageNumber: {
-    marginHorizontal: 16,
-    fontSize: 16,
+    marginHorizontal: width * 0.04, 
+    fontSize: width * 0.04, 
     color: '#004AAD',
+  },
+
+  footer: {
+    position: 'absolute',
+    bottom: height * 0.03, 
+    left: width * 0.05,
+    right: width * 0.05, 
+    zIndex: 10,
   },
 });
