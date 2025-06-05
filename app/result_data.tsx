@@ -7,6 +7,8 @@ import {
   ActivityIndicator,
   Alert,
   ScrollView,
+  Dimensions, 
+  Platform,  
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { db } from '../lib/firebaseConfig';
@@ -21,6 +23,8 @@ type Resultado = {
   interpretacao: string;
   data: any;
 };
+
+const { height, width } = Dimensions.get('window');
 
 export default function ResultData() {
   const params = useLocalSearchParams();
@@ -58,7 +62,7 @@ export default function ResultData() {
           });
         });
 
-        resultsList.sort((a, b) => b.data?.seconds - a.data?.seconds);
+        resultsList.sort((a, b) => (b.data?.seconds || 0) - (a.data?.seconds || 0)); 
         setResultados(resultsList);
       } catch (error) {
         console.error('Erro ao buscar resultados:', error);
@@ -102,16 +106,22 @@ export default function ResultData() {
 
   if (resultados.length === 0) {
     return (
-      <View style={styles.center}>
-        <Text>Nenhum resultado encontrado para este paciente.</Text>
+      <View style={styles.emptyResultsContainer}> 
+        <View style={styles.backButtonPosition}>
+          <BackButton />
+        </View>
+        <Text style={styles.headerTitle}>Dados Resultado</Text> 
+        <Text style={styles.emptyResultsText}>Nenhum resultado encontrado para este paciente.</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollViewContent}> 
       <View style={styles.header}>
-        <BackButton />
+        <View style={styles.backButtonPosition}>
+          <BackButton />
+        </View>
         <Text style={styles.headerTitle}>Dados Resultado</Text>
       </View>
 
@@ -125,7 +135,7 @@ export default function ResultData() {
                 {item.ehsani != null ? 'Resultado Ehsani' : 'Resultado IGK'}
               </Text>
 
-              <Text>
+              <Text style={styles.resultValueText}>
                 Valor calculado:{' '}
                 {item.ehsani != null
                   ? item.ehsani.toFixed(2)
@@ -134,14 +144,15 @@ export default function ResultData() {
                   : 'N/A'}
               </Text>
 
-              <Text>{item.interpretacao}</Text>
+              <Text style={styles.resultInterpretationText}>{item.interpretacao}</Text>
 
               <Text style={styles.dateText}>
-  Data: {item.data?.toDate?.().toLocaleString?.() ?? 'N/A'}
-</Text>
+                Data: {item.data?.toDate?.().toLocaleString?.() ?? 'N/A'}
+              </Text>
             </View>
           )}
-          scrollEnabled={false}
+          scrollEnabled={false} 
+          contentContainerStyle={styles.flatListInnerContent} 
         />
       </View>
 
@@ -155,63 +166,101 @@ export default function ResultData() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingBottom: 20,
+  scrollViewContent: { 
+    paddingBottom: height * 0.03, 
     backgroundColor: '#fff',
-    flexGrow: 1,
+    flexGrow: 1, 
   },
   header: {
     backgroundColor: '#F46F6F',
-    height: 100,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    height: Platform.OS === 'ios' ? height * 0.12 : height * 0.1, 
+    borderBottomLeftRadius: width * 0.07,
+    borderBottomRightRadius: width * 0.07, 
+    paddingTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.03, 
+    paddingHorizontal: width * 0.05, 
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'row',
+    flexDirection: 'row', 
+    position: 'relative', 
+  },
+  backButtonPosition: {
+    position: 'absolute',
+    left: width * 0.05,
+    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.03, 
+    zIndex: 1,
   },
   headerTitle: {
     color: '#fff',
-    fontSize: 22,
+    fontSize: width * 0.06, 
     fontWeight: '600',
     textAlign: 'center',
-    flex: 1,
+    flex: 1, 
   },
   resultsWrapper: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-    marginVertical: 20,
+    flex: 1, 
+    justifyContent: 'center', 
+    paddingHorizontal: width * 0.05, 
+    marginVertical: height * 0.025, 
+  },
+  flatListInnerContent: { 
+    paddingTop: height * 0.01, 
+    paddingBottom: height * 0.01, 
   },
   resultBox: {
-    marginBottom: 20,
-    padding: 15,
+    marginBottom: height * 0.02, 
+    padding: width * 0.04, 
     borderWidth: 1,
     borderColor: '#F46F6F',
-    borderRadius: 10,
+    borderRadius: width * 0.025,
     backgroundColor: '#ffe6e6',
   },
   resultTitle: {
     fontWeight: '700',
-    fontSize: 18,
-    marginBottom: 10,
+    fontSize: width * 0.045, 
+    marginBottom: height * 0.012, 
     color: '#b00000',
   },
+  resultValueText: { 
+    fontSize: width * 0.04,
+    marginBottom: height * 0.005,
+    color: '#333',
+  },
+  resultInterpretationText: { 
+    fontSize: width * 0.04,
+    lineHeight: width * 0.055,
+    color: '#333',
+    marginTop: height * 0.005, 
+  },
   dateText: {
-    marginTop: 8,
+    marginTop: height * 0.01, 
     fontStyle: 'italic',
     color: '#666',
+    fontSize: width * 0.035, 
   },
-  center: {
+  center: { 
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fff', 
+  },
+  emptyResultsContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'flex-start', 
+    alignItems: 'center',
+    paddingTop: Platform.OS === 'ios' ? height * 0.12 : height * 0.1, 
+    paddingHorizontal: width * 0.05,
+  },
+  emptyResultsText: {
+    fontSize: width * 0.045, 
+    color: '#666',
+    textAlign: 'center',
+    marginTop: height * 0.05, 
   },
   nextButton: {
-    alignSelf: 'center',
-    width: '70%',
-    marginTop: 10, 
-    marginBottom: 80, 
+    alignSelf: 'center', 
+    width: '70%', 
+    marginTop: height * 0.02, 
+    marginBottom: height * 0.08, 
   },
 });

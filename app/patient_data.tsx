@@ -1,18 +1,21 @@
 import React, { useState, useRef } from 'react';
 import {
+  ScrollView,
   View,
   Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
   TextInput,
-  Alert,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,      
+  Dimensions,
+  Platform,   
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import BorderedButton from '../components/BorderedButton';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../lib/firebaseConfig';
+import BackButton from '../components/BackButton'; 
 
 interface PatientDetails {
   id?: string;
@@ -24,6 +27,8 @@ interface PatientDetails {
   weight: string;
   gender: string;
 }
+
+const { height, width } = Dimensions.get('window'); 
 
 export default function PatientData() {
   const router = useRouter();
@@ -109,22 +114,22 @@ export default function PatientData() {
   };
 
   return (
-    <View style={styles.screen}>
-      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-        <Ionicons name="arrow-back" size={32} color="#ffff" />
-      </TouchableOpacity>
-
+    <View style={styles.fullScreenContainer}> 
       <View style={styles.headerTitleContainer}>
+        <View style={styles.backButtonPosition}>
+          <BackButton /> 
+        </View>
         <Text style={styles.title}>Dados do Paciente</Text>
       </View>
 
-      <ScrollView contentContainerStyle={styles.contentContainer}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}> 
         <View style={styles.infoRow}>
           <Text style={styles.label}>Nome:</Text>
           <TextInput
             style={styles.input}
             value={patient.name}
             onChangeText={(text) => handleChange('name', text)}
+            placeholderTextColor="#888" 
           />
         </View>
 
@@ -135,6 +140,7 @@ export default function PatientData() {
             value={patient.cpf}
             onChangeText={(text) => handleChange('cpf', text)}
             editable={false}
+            placeholderTextColor="#888" 
           />
         </View>
 
@@ -144,6 +150,7 @@ export default function PatientData() {
             style={styles.input}
             value={patient.birthDate}
             onChangeText={(text) => handleChange('birthDate', text)}
+            placeholderTextColor="#888" 
           />
         </View>
 
@@ -154,6 +161,7 @@ export default function PatientData() {
             value={patient.age}
             onChangeText={(text) => handleChange('age', text)}
             keyboardType="numeric"
+            placeholderTextColor="#888" 
           />
         </View>
 
@@ -163,6 +171,7 @@ export default function PatientData() {
             style={styles.input}
             value={patient.height}
             onChangeText={(text) => handleChange('height', text)}
+            placeholderTextColor="#888" 
           />
         </View>
 
@@ -172,6 +181,7 @@ export default function PatientData() {
             style={styles.input}
             value={patient.weight}
             onChangeText={(text) => handleChange('weight', text)}
+            placeholderTextColor="#888" 
           />
         </View>
 
@@ -181,10 +191,11 @@ export default function PatientData() {
             style={styles.input}
             value={patient.gender}
             onChangeText={(text) => handleChange('gender', text)}
+            placeholderTextColor="#888" 
           />
         </View>
 
-        <View style={{ alignItems: 'center', gap: 10, marginBottom: 20 }}>
+        <View style={styles.buttonsContainer}> 
           <BorderedButton title="CALCULADORA" onPress={handleNavigateCalculator} />
           {isModified() && (
             <BorderedButton title="SALVAR ALTERAÇÕES" onPress={handleSaveChanges} />
@@ -212,63 +223,71 @@ export default function PatientData() {
 }
 
 const styles = StyleSheet.create({
-  screen: {
+  fullScreenContainer: {
     flex: 1,
     backgroundColor: '#ffffff',
   },
-  backButton: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    zIndex: 2,
-  },
   headerTitleContainer: {
     backgroundColor: '#F46F6F',
-    height: 100,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    height: Platform.OS === 'ios' ? height * 0.12 : height * 0.1, 
+    borderBottomLeftRadius: width * 0.07, 
+    borderBottomRightRadius: width * 0.07, 
+    paddingTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.03, 
+    paddingHorizontal: width * 0.05, 
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative', 
+  },
+  backButtonPosition: {
+    position: 'absolute',
+    left: width * 0.05, 
+    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.03, 
+    zIndex: 2, 
   },
   title: {
-    fontSize: 22,
+    fontSize: width * 0.06, 
     fontWeight: 'bold',
     color: '#ffffff',
-    marginTop: 10,
+    marginTop: height * 0.01, 
   },
-  contentContainer: {
-    padding: 20,
-    paddingBottom: 40,
+  scrollViewContent: { 
+    padding: width * 0.05, 
+    paddingBottom: height * 0.05, 
+    flexGrow: 1, 
   },
   infoRow: {
-    marginBottom: 20,
+    marginBottom: height * 0.025,
     borderBottomWidth: 1,
     borderBottomColor: '#000',
-    paddingBottom: 6,
+    paddingBottom: height * 0.008, 
   },
   label: {
-    fontSize: 14,
+    fontSize: width * 0.038, 
     color: '#000',
     fontWeight: 'bold',
   },
   input: {
-    fontSize: 14,
+    fontSize: width * 0.04, 
     color: '#000',
-    marginTop: 2,
-    paddingVertical: 4,
+    marginTop: height * 0.005,
+    paddingVertical: height * 0.005, 
+  },
+  buttonsContainer: { 
+    alignItems: 'center',
+    gap: height * 0.015,
+    marginBottom: height * 0.025, 
+    marginTop: height * 0.03, 
   },
   resultButton: {
-    marginTop: 10,
-    backgroundColor: '#F26464',
-    paddingVertical: 14,
-    borderRadius: 12,
+    marginTop: height * 0.015, 
+    backgroundColor: '#F46F6F',
+    paddingVertical: height * 0.018, 
+    borderRadius: width * 0.03, 
     alignItems: 'center',
   },
   resultButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: width * 0.042, 
     fontWeight: 'bold',
   },
 });
