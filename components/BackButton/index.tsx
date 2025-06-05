@@ -1,7 +1,10 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
+import { TouchableOpacity, StyleSheet, ViewStyle, Dimensions } from 'react-native'; 
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+
+
+const { width } = Dimensions.get('window');
 
 interface BackButtonProps {
   style?: ViewStyle; 
@@ -12,7 +15,7 @@ const BackButton: React.FC<BackButtonProps> = ({ style }) => {
 
   return (
     <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.button, style]}>
-      <Ionicons name="arrow-back" size={30} color="#fff" />
+      <Ionicons name="arrow-back" size={width * 0.07} color="#fff" /> 
     </TouchableOpacity>
   );
 };
@@ -20,10 +23,6 @@ const BackButton: React.FC<BackButtonProps> = ({ style }) => {
 const styles = StyleSheet.create({
   button: {
     padding: 10,
-    position: 'absolute',
-    top: 25,
-    left: 20,
-    zIndex: 1,
   },
 });
 

@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Platform } from 'react-native'; 
-import BackButton from '../components/BackButton';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Platform } from 'react-native';
+import BackButton from '../components/BackButton'; 
 import { AntDesign } from '@expo/vector-icons';
 
-const { height, width } = Dimensions.get('window'); 
+const { height, width } = Dimensions.get('window');
 
 export default function Sobre() {
   const [showInstructions, setShowInstructions] = useState(false);
 
   return (
-    <View style={styles.fullScreenContainer}> 
+    <View style={styles.fullScreenContainer}>
       <View style={styles.header}>
-        <BackButton />
+        <View style={styles.backButtonPosition}>
+          <BackButton />
+        </View>
         <Text style={styles.headerTitle}>Sobre o Aplicativo</Text>
       </View>
 
@@ -44,9 +46,9 @@ export default function Sobre() {
             </Text>
             <AntDesign
               name={showInstructions ? 'up' : 'down'}
-              size={width * 0.05} 
+              size={width * 0.05}
               color="#fff"
-              style={{ marginLeft: width * 0.02 }} 
+              style={{ marginLeft: width * 0.02 }}
             />
           </TouchableOpacity>
 
@@ -104,47 +106,53 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  scrollViewFlex: { 
+  scrollViewFlex: {
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: height * 0.04, 
+    paddingBottom: height * 0.04,
     backgroundColor: '#fff',
-    flexGrow: 1, 
+    flexGrow: 1,
   },
   header: {
     backgroundColor: '#F46F6F',
-    height: Platform.OS === 'ios' ? height * 0.12 : height * 0.1, 
+    height: Platform.OS === 'ios' ? height * 0.12 : height * 0.1,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
-    paddingTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.03, 
-    paddingHorizontal: width * 0.05, 
+    paddingTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.03,
+    paddingHorizontal: width * 0.05,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
   },
+  backButtonPosition: {
+    position: 'absolute',
+    left: width * 0.05,
+    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.04, 
+    zIndex: 1,
+  },
   headerTitle: {
     color: '#fff',
-    fontSize: width * 0.055, 
+    fontSize: width * 0.055,
     fontWeight: '600',
     textAlign: 'center',
   },
   content: {
-    padding: width * 0.05, 
+    padding: width * 0.05,
   },
   paragraph: {
-    fontSize: width * 0.04, 
+    fontSize: width * 0.04,
     color: '#444',
-    marginBottom: height * 0.015, 
-    lineHeight: width * 0.06, 
+    marginBottom: height * 0.015,
+    lineHeight: width * 0.06,
     textAlign: 'justify',
   },
   bullet: {
-    fontSize: width * 0.04, 
+    fontSize: width * 0.04,
     color: '#444',
-    marginBottom: height * 0.01, 
-    lineHeight: width * 0.06, 
-    paddingLeft: width * 0.02, 
+    marginBottom: height * 0.01,
+    lineHeight: width * 0.06,
+    paddingLeft: width * 0.02,
   },
   bold: {
     fontWeight: 'bold',
@@ -152,21 +160,21 @@ const styles = StyleSheet.create({
   toggleButton: {
     flexDirection: 'row',
     backgroundColor: '#F46F6F',
-    paddingVertical: height * 0.015, 
+    paddingVertical: height * 0.015,
     paddingHorizontal: width * 0.05,
     borderRadius: 10,
     alignSelf: 'center',
-    marginTop: height * 0.025, 
+    marginTop: height * 0.025,
     alignItems: 'center',
   },
   toggleButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: width * 0.04, 
+    fontSize: width * 0.04,
   },
   instructionsContainer: {
-    marginTop: height * 0.025, 
-    padding: width * 0.04, 
+    marginTop: height * 0.025,
+    padding: width * 0.04,
     backgroundColor: '#F9F9F9',
     borderRadius: 12,
     shadowColor: '#000',
@@ -179,27 +187,27 @@ const styles = StyleSheet.create({
     fontSize: width * 0.05,
     fontWeight: 'bold',
     color: '#F46F6F',
-    marginBottom: height * 0.015, 
+    marginBottom: height * 0.015,
     textAlign: 'center',
   },
   instructionBlock: {
-    marginBottom: height * 0.02, 
-    padding: width * 0.03, 
+    marginBottom: height * 0.02,
+    padding: width * 0.03,
     backgroundColor: '#fff',
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#eee',
   },
   sectionTitle: {
-    fontSize: width * 0.045, 
+    fontSize: width * 0.045,
     fontWeight: 'bold',
-    marginBottom: height * 0.01, 
+    marginBottom: height * 0.01,
     color: '#333',
   },
   instructionText: {
-    fontSize: width * 0.038, 
+    fontSize: width * 0.038,
     color: '#555',
-    marginBottom: height * 0.008, 
-    lineHeight: width * 0.055, 
+    marginBottom: height * 0.008,
+    lineHeight: width * 0.055,
   },
 });
