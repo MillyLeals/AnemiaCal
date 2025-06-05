@@ -8,6 +8,7 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  Dimensions,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MaskedTextInput } from 'react-native-mask-text';
@@ -19,6 +20,8 @@ import { auth, db } from '../lib/firebaseConfig';
 import BackButton from '../components/BackButton';
 import BorderedButton from '../components/BorderedButton';
 import GenderSelector from '../components/GenderSelector';
+
+const { height, width } = Dimensions.get('window'); 
 
 export default function PatientRegister() {
   const router = useRouter();
@@ -190,7 +193,7 @@ export default function PatientRegister() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={{ flex: 1 }}
     >
-      <ScrollView contentContainerStyle={styles.container} style={styles.scrollViewFill}> 
+      <ScrollView contentContainerStyle={styles.container} style={styles.scrollViewFlex}>
         <View style={styles.header}>
           <BackButton />
           <Text style={styles.headerTitle}>Cadastro de Paciente</Text>
@@ -267,53 +270,53 @@ export default function PatientRegister() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 30,
+    paddingBottom: height * 0.04,
     backgroundColor: '#fff',
-    flexGrow: 1, 
+    flexGrow: 1,
   },
-  scrollViewFill: { 
+  scrollViewFlex: {
     flex: 1,
   },
   header: {
     backgroundColor: '#F46F6F',
-    height: 100,
+    height: Platform.OS === 'ios' ? height * 0.12 : height * 0.1, 
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    paddingTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.03, 
+    paddingHorizontal: width * 0.05, 
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerTitle: {
     color: '#fff',
-    fontSize: 22,
+    fontSize: width * 0.055, 
     fontWeight: '600',
     textAlign: 'center',
   },
   form: {
-    marginTop: 10,
-    paddingHorizontal: 20,
+    marginTop: height * 0.015, 
+    paddingHorizontal: width * 0.05, 
   },
   label: {
     fontWeight: '600',
-    fontSize: 16,
-    marginTop: 15,
+    fontSize: width * 0.04, 
+    marginTop: height * 0.02, 
   },
   input: {
     borderWidth: 1,
     borderColor: '#CCC',
     borderRadius: 10,
-    padding: 10,
-    marginTop: 5,
-    fontSize: 16,
+    padding: width * 0.03, 
+    marginTop: height * 0.008, 
+    fontSize: width * 0.04, 
   },
   ageText: {
-    marginTop: 5,
-    fontSize: 14,
+    marginTop: height * 0.008, 
+    fontSize: width * 0.035, 
     color: '#666',
   },
   bottomButtons: {
-    marginTop: 30,
+    marginTop: height * 0.04, 
     alignItems: 'center',
   },
 });

@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   button: {
     padding: 10,
     position: 'absolute',
-    top: 36,
+    top: 25,
     left: 20,
     zIndex: 1,
   },
