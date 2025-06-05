@@ -8,7 +8,7 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  Dimensions,
+  Dimensions, 
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MaskedTextInput } from 'react-native-mask-text';
@@ -17,7 +17,7 @@ import dayjs from 'dayjs';
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../lib/firebaseConfig';
 
-import BackButton from '../components/BackButton';
+import BackButton from '../components/BackButton'; 
 import BorderedButton from '../components/BorderedButton';
 import GenderSelector from '../components/GenderSelector';
 
@@ -195,7 +195,9 @@ export default function PatientRegister() {
     >
       <ScrollView contentContainerStyle={styles.container} style={styles.scrollViewFlex}>
         <View style={styles.header}>
-          <BackButton />
+          <View style={styles.backButtonPosition}>
+            <BackButton />
+          </View>
           <Text style={styles.headerTitle}>Cadastro de Paciente</Text>
         </View>
 
@@ -206,6 +208,7 @@ export default function PatientRegister() {
             value={formData.name}
             onChangeText={(val) => handleInputChange('name', val)}
             placeholder="Digite o nome completo"
+            placeholderTextColor="#888" 
           />
 
           <Text style={styles.label}>CPF*:</Text>
@@ -216,6 +219,7 @@ export default function PatientRegister() {
             value={formData.cpf}
             onChangeText={(val) => handleInputChange('cpf', val)}
             placeholder="000.000.000-00"
+            placeholderTextColor="#888" 
           />
 
           <Text style={styles.label}>Data de Nascimento*:</Text>
@@ -226,6 +230,7 @@ export default function PatientRegister() {
             value={formData.birthDate}
             onChangeText={(val) => handleInputChange('birthDate', val)}
             placeholder="dd/mm/aaaa"
+            placeholderTextColor="#888" 
           />
 
           {formData.age && (
@@ -240,6 +245,7 @@ export default function PatientRegister() {
             value={formData.height}
             onChangeText={(val) => handleInputChange('height', val)}
             placeholder="Ex: 1,70"
+            placeholderTextColor="#888" 
           />
 
           <Text style={styles.label}>Peso (kg)*:</Text>
@@ -250,6 +256,7 @@ export default function PatientRegister() {
             value={formData.weight}
             onChangeText={(val) => handleInputChange('weight', val)}
             placeholder="Ex: 65,50"
+            placeholderTextColor="#888" 
           />
 
           <GenderSelector
@@ -270,7 +277,7 @@ export default function PatientRegister() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: height * 0.04,
+    paddingBottom: height * 0.04, 
     backgroundColor: '#fff',
     flexGrow: 1,
   },
@@ -286,6 +293,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05, 
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative', 
+  },
+  backButtonPosition: {
+    position: 'absolute',
+    left: width * 0.05,
+    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.04, 
+    zIndex: 1,
   },
   headerTitle: {
     color: '#fff',
@@ -311,7 +325,7 @@ const styles = StyleSheet.create({
     fontSize: width * 0.04, 
   },
   ageText: {
-    marginTop: height * 0.008, 
+    marginTop: height * 0.008,
     fontSize: width * 0.035, 
     color: '#666',
   },
