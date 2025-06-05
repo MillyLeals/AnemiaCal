@@ -6,16 +6,21 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert,
+  Alert,     
+  Dimensions, 
+  Platform,   
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
 import BackButton from '../components/BackButton';
 import BorderedButton from '../components/BorderedButton';
 import InfoLinkButton from '../components/InfoLinkButton';
-import { db } from '../lib/firebaseConfig'; 
+import { db } from '../lib/firebaseConfig';
 import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+
+
+const { height, width } = Dimensions.get('window');
 
 export default function CalculatorEhsani() {
   const router = useRouter();
@@ -94,7 +99,7 @@ export default function CalculatorEhsani() {
         tipo: 'Ehsani',
       });
 
-      Alert.alert('Sucesso', 'Resultado salvo com sucesso!');  
+      Alert.alert('Sucesso', 'Resultado salvo com sucesso!');
 
     } catch (error) {
       console.error('Erro ao salvar resultado:', error);
@@ -103,9 +108,11 @@ export default function CalculatorEhsani() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollViewContent}> 
       <View style={styles.header}>
-        <BackButton />
+        <View style={styles.backButtonPosition}>
+          <BackButton />
+        </View>
         <Text style={styles.headerTitle}>Calculadora Ehsani</Text>
       </View>
 
@@ -117,6 +124,7 @@ export default function CalculatorEhsani() {
           value={rbc}
           onChangeText={setRbc}
           placeholder="Ex: 4.5"
+          placeholderTextColor="#888" 
         />
 
         <Text style={styles.label}>VCM*:</Text>
@@ -126,6 +134,7 @@ export default function CalculatorEhsani() {
           value={vcm}
           onChangeText={setVcm}
           placeholder="Ex: 85"
+          placeholderTextColor="#888" 
         />
 
         <Text style={styles.label}>Cut Off*:</Text>
@@ -135,6 +144,7 @@ export default function CalculatorEhsani() {
           value={cutOff}
           onChangeText={setCutOff}
           placeholder="15"
+          placeholderTextColor="#888" 
         />
 
         <View style={styles.bottomButtons}>
@@ -144,8 +154,8 @@ export default function CalculatorEhsani() {
         {resultado && (
           <View style={styles.resultBox}>
             <Text style={styles.resultTitle}>Resultado Ehsani</Text>
-            <Text>Valor calculado: {resultado.ehsani?.toFixed(2) ?? 'N/A'}</Text>
-            <Text>{resultado.interpretacao}</Text>
+            <Text style={styles.resultValueText}>Valor calculado: {resultado.ehsani?.toFixed(2) ?? 'N/A'}</Text> 
+            <Text style={styles.resultInterpretationText}>{resultado.interpretacao}</Text>
 
             <TouchableOpacity style={styles.saveButton} onPress={handleSaveResult}>
               <Text style={styles.saveButtonText}>SALVAR RESULTADO</Text>
@@ -170,77 +180,101 @@ export default function CalculatorEhsani() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingBottom: 30,
+  scrollViewContent: {
+    paddingBottom: height * 0.04, 
     backgroundColor: '#fff',
+    flexGrow: 1,
   },
   header: {
     backgroundColor: '#F46F6F',
-    height: 100,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    height: Platform.OS === 'ios' ? height * 0.12 : height * 0.1,
+    borderBottomLeftRadius: width * 0.07, 
+    borderBottomRightRadius: width * 0.07, 
+    paddingTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.03, 
+    paddingHorizontal: width * 0.05,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative', 
+  },
+  backButtonPosition: {
+    position: 'absolute',
+    left: width * 0.05,
+    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.03,
+    zIndex: 1, 
   },
   headerTitle: {
     color: '#fff',
-    fontSize: 22,
+    fontSize: width * 0.06, 
     fontWeight: '600',
     textAlign: 'center',
   },
   form: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingHorizontal: width * 0.05, 
+    paddingTop: height * 0.025, 
   },
   label: {
     fontWeight: '600',
-    marginBottom: 4,
-    marginTop: 12,
+    marginBottom: height * 0.005, 
+    marginTop: height * 0.015, 
+    fontSize: width * 0.04, 
   },
   input: {
     borderBottomWidth: 1,
     borderColor: '#888',
-    paddingVertical: 4,
-    marginBottom: 8,
+    paddingVertical: height * 0.008, 
+    marginBottom: height * 0.01, 
+    fontSize: width * 0.04,
   },
   bottomButtons: {
-    marginTop: 30,
+    marginTop: height * 0.04,
     alignItems: 'center',
   },
   resultBox: {
-    marginTop: 20,
-    padding: 15,
+    marginTop: height * 0.025, 
+    padding: width * 0.04,
     borderWidth: 1,
     borderColor: '#F46F6F',
-    borderRadius: 10,
+    borderRadius: width * 0.025, 
     backgroundColor: '#ffe6e6',
     width: '100%',
   },
   resultTitle: {
     fontWeight: '700',
-    fontSize: 18,
-    marginBottom: 15,
+    fontSize: width * 0.045, 
+    marginBottom: height * 0.015, 
     color: '#b00000',
+  },
+  resultValueText: {
+    fontSize: width * 0.038, 
+    marginBottom: height * 0.005,
+    color: '#333',
+  },
+  resultInterpretationText: {
+    fontSize: width * 0.038, 
+    lineHeight: width * 0.05, 
+    color: '#333',
+    marginTop: height * 0.008, 
   },
   saveButton: {
     backgroundColor: '#F46F6F',
-    paddingVertical: 10,
-    paddingHorizontal: 70,
-    borderRadius: 10,
-    marginTop: 25,
+    paddingVertical: height * 0.015, 
+    paddingHorizontal: width * 0.17, 
+    borderRadius: width * 0.025,
+    marginTop: height * 0.03, 
     alignItems: 'center',
   },
   saveButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: width * 0.04, 
   },
   linksRow: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 15,
+    justifyContent: 'center', 
+    marginTop: height * 0.02, 
     width: '100%',
-  },
+    paddingBottom: height * 0.04, 
+    flexWrap: 'wrap', 
+    gap: width * 0.02, 
+  },
 });

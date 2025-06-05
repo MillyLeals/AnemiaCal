@@ -1,8 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions, 
+  Platform,  
+} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import BackButton from '../components/BackButton';
+import BorderedButton from '../components/BorderedButton'; 
+
+const { height, width } = Dimensions.get('window');
 
 export default function CalculadoraMetabolismoFerro() {
   const router = useRouter();
@@ -12,31 +23,33 @@ export default function CalculadoraMetabolismoFerro() {
   const [resultado, setResultado] = useState<string | null>(null);
 
   const calcularResultado = () => {
-  if (ferro === '↓' && ferritina === '↓') {
-    setResultado('Anemia Ferropriva / Deficiência de Ferro');
-  } else if (ferro === 'N' && ferritina === '↓') {
-    setResultado('Possível Deficiência de Ferro');
-  } else if (ferro === '↓' && (ferritina === 'N' || ferritina === '↑')) {
-    setResultado('Possível Anemia de Doenças Crônicas');
-  } else if (ferro === 'N' && ferritina === 'N') {
-    setResultado('Possível Anemia de Doenças Crônicas');
-  } else if (ferro === 'N' && ferritina === '↑') {
-    setResultado('Anemia de Doenças Crônicas / Sideroblástica');
-  } else if (ferro === '↑') {
-    setResultado('Não cabe com o algoritmo aplicado');
-  } else {
-    setResultado('Resultado não identificado');
-  }
-};
+    if (ferro === '↓' && ferritina === '↓') {
+      setResultado('Anemia Ferropriva / Deficiência de Ferro');
+    } else if (ferro === 'N' && ferritina === '↓') {
+      setResultado('Possível Deficiência de Ferro');
+    } else if (ferro === '↓' && (ferritina === 'N' || ferritina === '↑')) {
+      setResultado('Possível Anemia de Doenças Crônicas');
+    } else if (ferro === 'N' && ferritina === 'N') {
+      setResultado('Possível Anemia de Doenças Crônicas');
+    } else if (ferro === 'N' && ferritina === '↑') {
+      setResultado('Anemia de Doenças Crônicas / Sideroblástica');
+    } else if (ferro === '↑') {
+      setResultado('Não cabe com o algoritmo aplicado');
+    } else {
+      setResultado('Resultado não identificado');
+    }
+  };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.fullScreenContainer}>
       <View style={styles.header}>
-        <BackButton />
+        <View style={styles.backButtonPosition}>
+          <BackButton />
+        </View>
         <Text style={styles.headerTitle}>Metabolismo de Ferro</Text>
       </View>
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <Text style={styles.label}>Ferro:</Text>
         <View style={styles.pickerContainer}>
           <Picker
@@ -63,10 +76,8 @@ export default function CalculadoraMetabolismoFerro() {
           </Picker>
         </View>
 
-        <View style={styles.button}>
-          <TouchableOpacity style={styles.saveButton} onPress={calcularResultado}>
-            <Text style={styles.saveButtonText}>CALCULAR</Text>
-          </TouchableOpacity>
+        <View style={styles.buttonContainer}> 
+          <BorderedButton title="CALCULAR" onPress={calcularResultado} />
         </View>
 
         {resultado && (
@@ -74,8 +85,8 @@ export default function CalculadoraMetabolismoFerro() {
             <Text style={styles.resultLabel}>Resultado:</Text>
             <Text style={styles.resultText}>{resultado}</Text>
 
-            <TouchableOpacity style={styles.saveButton} onPress={() => router.replace('/home')}>
-              <Text style={styles.saveButtonText}>HOME</Text>
+            <TouchableOpacity style={styles.homeButton} onPress={() => router.replace('/home')}>
+              <Text style={styles.homeButtonText}>HOME</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -85,83 +96,94 @@ export default function CalculadoraMetabolismoFerro() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingBottom: 30,
+  fullScreenContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  scrollViewContent: {
+    paddingHorizontal: width * 0.05,
+    paddingVertical: height * 0.035,
+    paddingBottom: height * 0.04,
+    flexGrow: 1,
     backgroundColor: '#fff',
   },
   header: {
     backgroundColor: '#F46F6F',
-    height: 100,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    height: Platform.OS === 'ios' ? height * 0.12 : height * 0.1,
+    borderBottomLeftRadius: width * 0.07,
+    borderBottomRightRadius: width * 0.07,
+    paddingTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.03,
+    paddingHorizontal: width * 0.05,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
+  },
+  backButtonPosition: {
+    position: 'absolute',
+    left: width * 0.05,
+    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.03,
+    zIndex: 1,
   },
   headerTitle: {
     color: '#fff',
-    fontSize: 22,
+    fontSize: width * 0.06,
     fontWeight: '600',
     textAlign: 'center',
   },
-  content: {
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-  },
   label: {
-    fontSize: 16,
+    fontSize: width * 0.04,
     fontWeight: '600',
-    marginBottom: 10,
-    marginTop: 20,
+    marginBottom: height * 0.01,
+    marginTop: height * 0.025,
   },
   pickerContainer: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 10,
+    borderRadius: width * 0.025,
     overflow: 'hidden',
-    marginBottom: 10,
+    marginBottom: height * 0.015,
   },
   picker: {
-    height: 60,
+    height: height * 0.07,
     width: '100%',
   },
-  button: {
-    marginTop: 30,
+  buttonContainer: {
+    marginTop: height * 0.04, 
     alignItems: 'center',
   },
   resultContainer: {
-    marginTop: 30,
-    padding: 20,
+    marginTop: height * 0.04, 
+    padding: width * 0.05, 
     backgroundColor: '#ffeaea',
-    borderRadius: 10,
+    borderRadius: width * 0.025, 
     borderColor: '#f46f6f',
     borderWidth: 1,
   },
   resultLabel: {
-    fontSize: 18,
+    fontSize: width * 0.045, 
     fontWeight: '700',
-    marginBottom: 10,
+    marginBottom: height * 0.015, 
     color: '#c62828',
   },
   resultText: {
-    fontSize: 16,
+    fontSize: width * 0.04,
     color: '#333',
-    marginBottom: 20,
+    marginBottom: height * 0.025, 
+    lineHeight: width * 0.055, 
   },
-  saveButton: {
-    marginTop: 20,
+  homeButton: {
+    marginTop: height * 0.025, 
     backgroundColor: '#f46f6f',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
+    paddingVertical: height * 0.015, 
+    paddingHorizontal: width * 0.05,
+    borderRadius: width * 0.02,
     alignItems: 'center',
     alignSelf: 'stretch',
   },
-  saveButtonText: {
+  homeButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: width * 0.04, 
     textTransform: 'uppercase',
   },
 });

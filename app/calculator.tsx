@@ -6,12 +6,14 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Platform,
+  Alert,
 } from 'react-native';
 import { router } from 'expo-router';
 import BorderedButton from '../components/BorderedButton';
 import BackButton from '../components/BackButton';
 
-const { width } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 export default function Calculator() {
   const [birthDate, setBirthDate] = useState('');
@@ -49,7 +51,7 @@ export default function Calculator() {
 
   const handleStartCalculator = () => {
     if (birthDate.length !== 10) {
-      alert('Digite a data de nascimento completa no formato DD/MM/AAAA');
+      Alert.alert('Erro', 'Digite a data de nascimento completa no formato DD/MM/AAAA');
       return;
     }
 
@@ -64,9 +66,11 @@ export default function Calculator() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.fullScreenContainer}>
       <View style={styles.header}>
-        <BackButton />
+        <View style={styles.backButtonPosition}>
+          <BackButton />
+        </View>
         <Text style={styles.headerTitle}>Calculadoras</Text>
       </View>
       <Text style={styles.infoText}>
@@ -81,6 +85,7 @@ export default function Calculator() {
           value={birthDate}
           onChangeText={formatBirthDate}
           placeholder="Ex: 15/08/2012"
+          placeholderTextColor="#888"
           keyboardType="numeric"
         />
 
@@ -104,8 +109,6 @@ export default function Calculator() {
           >
             <Text style={styles.linkText}>Calculadora Metabolismo Ferro</Text>
           </TouchableOpacity>
-
-          
         </View>
       </View>
     </View>
@@ -113,77 +116,84 @@ export default function Calculator() {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingBottom: 30,
+  fullScreenContainer: {
+    flex: 1,
     backgroundColor: '#fff',
   },
   header: {
     backgroundColor: '#F46F6F',
-    height: 100,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    height: Platform.OS === 'ios' ? height * 0.12 : height * 0.1,
+    borderBottomLeftRadius: width * 0.07,
+    borderBottomRightRadius: width * 0.07,
+    paddingTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.03,
+    paddingHorizontal: width * 0.05,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
+  },
+  backButtonPosition: {
+    position: 'absolute',
+    left: width * 0.05,
+    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.03,
+    zIndex: 1,
   },
   headerTitle: {
     color: '#fff',
-    fontSize: 22,
+    fontSize: width * 0.06,
     fontWeight: '600',
     textAlign: 'center',
   },
   infoText: {
-  marginTop: 20,
-  marginHorizontal: 20,
-  textAlign: 'center',
-  fontSize: 14,
-  color: '#444',
-  fontStyle: 'italic',
-},
+    marginTop: height * 0.025,
+    marginHorizontal: width * 0.05,
+    textAlign: 'center',
+    fontSize: width * 0.038,
+    color: '#444',
+    fontStyle: 'italic',
+  },
   content: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingHorizontal: width * 0.05,
+    paddingTop: height * 0.025,
   },
   label: {
     fontWeight: '600',
-    marginBottom: 4,
-    marginTop: 12,
+    marginBottom: height * 0.005,
+    marginTop: height * 0.015,
+    fontSize: width * 0.04,
   },
   input: {
     borderBottomWidth: 1,
     borderColor: '#888',
-    paddingVertical: 4,
-    marginBottom: 8,
+    paddingVertical: height * 0.008,
+    marginBottom: height * 0.01,
+    fontSize: width * 0.04,
   },
   ageText: {
     fontStyle: 'italic',
-    fontSize: 14,
-    marginBottom: 8,
+    fontSize: width * 0.035,
+    marginBottom: height * 0.01,
     color: '#666',
   },
   buttonContainer: {
-    marginTop: 50,
+    marginTop: height * 0.06,
     alignItems: 'center',
   },
   linksContainer: {
-    marginTop: 40,
+    marginTop: height * 0.05,
     alignItems: 'center',
   },
   linkButton: {
-    marginVertical: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 25,
+    marginVertical: height * 0.012,
+    paddingVertical: height * 0.015,
+    paddingHorizontal: width * 0.06,
     backgroundColor: '#F46F6F',
-    borderRadius: 25,
+    borderRadius: width * 0.06,
     width: width * 0.8,
     alignItems: 'center',
   },
   linkText: {
     color: '#fff',
     fontWeight: '600',
-    fontSize: 16,
+    fontSize: width * 0.042,
   },
 });
-
-

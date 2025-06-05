@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Dimensions,
+  Platform,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
@@ -17,6 +19,8 @@ import InfoLinkButton from '../components/InfoLinkButton';
 import { db } from '../lib/firebaseConfig';
 import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+
+const { height, width } = Dimensions.get('window');
 
 export default function CalculatorIGK() {
   const router = useRouter();
@@ -56,62 +60,64 @@ export default function CalculatorIGK() {
     const igk = (vcmNum * vcmNum * rdwNum) / (100 * hbNum);
 
     let interpretacao = '';
-const cutOff = principio === 'impedancia' ? 65 : 70;
+    const cutOff = principio === 'impedancia' ? 65 : 70;
 
-if (igk > cutOff && rbcNum < 5) {
-  interpretacao = 'Sugestivo de Anemia Ferropriva\n→ Indicar testes de metabolismo do ferro';
-} else if (igk <= cutOff && rbcNum > 5) {
-  interpretacao = 'Sugestivo de Talassemia Menor\n→ Indicar Eletroforese de Hemoglobina';
-} else {
-  interpretacao = 'Resultado inconclusivo. Avaliar com outros exames.';
-}
+    if (igk > cutOff && rbcNum < 5) {
+      interpretacao = 'Sugestivo de Anemia Ferropriva\n→ Indicar testes de metabolismo do ferro';
+    } else if (igk <= cutOff && rbcNum > 5) {
+      interpretacao = 'Sugestivo de Talassemia Menor\n→ Indicar Eletroforese de Hemoglobina';
+    } else {
+      interpretacao = 'Resultado inconclusivo. Avaliar com outros exames.';
+    }
 
-setResultado({ igk, interpretacao });
+    setResultado({ igk, interpretacao });
   };
 
   const handleSaveResult = async () => {
-  if (!resultado) return;
+    if (!resultado) return;
 
-  if (!patientId) {
-    Alert.alert('Erro', 'ID do paciente não informado.');
-    return;
-  }
-
-  try {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (!user) {
-      Alert.alert('Erro', 'Usuário não autenticado.');
+    if (!patientId) {
+      Alert.alert('Erro', 'ID do paciente não informado.');
       return;
     }
 
-    await addDoc(collection(db, 'resultados_pacientes'), {
-      uid: user.uid,
-      patientId: patientId,
-      hb: parseFloat(hb.replace(',', '.')),
-      rdw: parseFloat(rdw.replace(',', '.')),
-      rbc: parseFloat(rbc.replace(',', '.')),
-      vcm: parseFloat(vcm.replace(',', '.')),
-      principioContagem: principio,
-      igk: resultado.igk,
-      interpretacao: resultado.interpretacao,
-      data: Timestamp.now(),
-      tipo: 'IGK',
-    });
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
 
-    Alert.alert('Sucesso', 'Resultado salvo com sucesso!');
+      if (!user) {
+        Alert.alert('Erro', 'Usuário não autenticado.');
+        return;
+      }
 
-  } catch (error) {
-    console.error('Erro ao salvar resultado:', error);
-    Alert.alert('Erro', 'Não foi possível salvar o resultado.');
-  }
-};
+      await addDoc(collection(db, 'resultados_pacientes'), {
+        uid: user.uid,
+        patientId: patientId,
+        hb: parseFloat(hb.replace(',', '.')),
+        rdw: parseFloat(rdw.replace(',', '.')),
+        rbc: parseFloat(rbc.replace(',', '.')),
+        vcm: parseFloat(vcm.replace(',', '.')),
+        principioContagem: principio,
+        igk: resultado.igk,
+        interpretacao: resultado.interpretacao,
+        data: Timestamp.now(),
+        tipo: 'IGK',
+      });
+
+      Alert.alert('Sucesso', 'Resultado salvo com sucesso!');
+
+    } catch (error) {
+      console.error('Erro ao salvar resultado:', error);
+      Alert.alert('Erro', 'Não foi possível salvar o resultado.');
+    }
+  };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.header}>
-        <BackButton />
+        <View style={styles.backButtonPosition}>
+          <BackButton />
+        </View>
         <Text style={styles.headerTitle}>Calculadora IGK</Text>
       </View>
 
@@ -123,6 +129,7 @@ setResultado({ igk, interpretacao });
           value={hb}
           onChangeText={setHb}
           placeholder="Ex: 12.5"
+          placeholderTextColor="#888"
         />
 
         <Text style={styles.label}>RDW (%)*:</Text>
@@ -132,6 +139,7 @@ setResultado({ igk, interpretacao });
           value={rdw}
           onChangeText={setRdw}
           placeholder="Ex: 14"
+          placeholderTextColor="#888"
         />
 
         <Text style={styles.label}>Contagem de Hemácias (RBC)*:</Text>
@@ -141,6 +149,7 @@ setResultado({ igk, interpretacao });
           value={rbc}
           onChangeText={setRbc}
           placeholder="Ex: 4.5"
+          placeholderTextColor="#888"
         />
 
         <Text style={styles.label}>VCM*:</Text>
@@ -150,15 +159,16 @@ setResultado({ igk, interpretacao });
           value={vcm}
           onChangeText={setVcm}
           placeholder="Ex: 80"
+          placeholderTextColor="#888"
         />
 
-        <Text style={[styles.label, { marginTop: 20 }]}>
+        <Text style={[styles.label, { marginTop: height * 0.025 }]}>
           Princípio de contagem do analisador*:
         </Text>
 
-        <View style={{ flexDirection: 'column', marginVertical: 10 }}>
+        <View style={styles.radioGroup}>
           <TouchableOpacity
-            style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}
+            style={styles.radioButton}
             onPress={() => setPrincipio('impedancia')}
           >
             <View
@@ -167,11 +177,11 @@ setResultado({ igk, interpretacao });
                 principio === 'impedancia' && styles.selectedRadio,
               ]}
             />
-            <Text style={{ marginLeft: 10 }}>Impedância Elétrica</Text>
+            <Text style={styles.radioText}>Impedância Elétrica</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={{ flexDirection: 'row', alignItems: 'center' }}
+            style={styles.radioButton}
             onPress={() => setPrincipio('laser')}
           >
             <View
@@ -180,12 +190,12 @@ setResultado({ igk, interpretacao });
                 principio === 'laser' && styles.selectedRadio,
               ]}
             />
-            <Text style={{ marginLeft: 10 }}>Leitura Ótica/Laser</Text>
+            <Text style={styles.radioText}>Leitura Ótica/Laser</Text>
           </TouchableOpacity>
 
-          <Text style={{ fontStyle: 'italic', fontSize: 12, marginTop: 4, color: '#555' }}>
-        CUT OFF: {principio === 'impedancia' ? '65' : '70'}
-        </Text>
+          <Text style={styles.cutOffText}>
+            CUT OFF: {principio === 'impedancia' ? '65' : '70'}
+          </Text>
         </View>
 
         <View style={styles.bottomButtons}>
@@ -195,8 +205,8 @@ setResultado({ igk, interpretacao });
         {resultado && (
           <View style={styles.resultBox}>
             <Text style={styles.resultTitle}>Resultado IGK</Text>
-            <Text>Valor calculado: {resultado.igk?.toFixed(2) ?? 'N/A'}</Text>
-            <Text>{resultado.interpretacao}</Text>
+            <Text style={styles.resultValueText}>Valor calculado: {resultado.igk?.toFixed(2) ?? 'N/A'}</Text>
+            <Text style={styles.resultInterpretationText}>{resultado.interpretacao}</Text>
 
             <TouchableOpacity style={styles.saveButton} onPress={handleSaveResult}>
               <Text style={styles.saveButtonText}>SALVAR RESULTADO</Text>
@@ -228,45 +238,64 @@ setResultado({ igk, interpretacao });
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingBottom: 30,
+  scrollViewContent: {
+    paddingBottom: height * 0.04,
     backgroundColor: '#fff',
+    flexGrow: 1,
   },
   header: {
     backgroundColor: '#F46F6F',
-    height: 100,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    height: Platform.OS === 'ios' ? height * 0.12 : height * 0.1,
+    borderBottomLeftRadius: width * 0.07,
+    borderBottomRightRadius: width * 0.07,
+    paddingTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.03,
+    paddingHorizontal: width * 0.05,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
+  },
+  backButtonPosition: {
+    position: 'absolute',
+    left: width * 0.05,
+    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.03,
+    zIndex: 1,
   },
   headerTitle: {
     color: '#fff',
-    fontSize: 22,
+    fontSize: width * 0.06,
     fontWeight: '600',
     textAlign: 'center',
   },
   form: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingHorizontal: width * 0.05,
+    paddingTop: height * 0.025,
   },
   label: {
     fontWeight: '600',
-    marginBottom: 4,
-    marginTop: 12,
+    marginBottom: height * 0.005,
+    marginTop: height * 0.015,
+    fontSize: width * 0.04,
   },
   input: {
     borderBottomWidth: 1,
     borderColor: '#888',
-    paddingVertical: 4,
-    marginBottom: 8,
+    paddingVertical: height * 0.008,
+    marginBottom: height * 0.01,
+    fontSize: width * 0.04,
+  },
+  radioGroup: {
+    flexDirection: 'column',
+    marginVertical: height * 0.015,
+  },
+  radioButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: height * 0.01,
   },
   radioCircle: {
-    height: 18,
-    width: 18,
-    borderRadius: 9,
+    height: width * 0.045,
+    width: width * 0.045,
+    borderRadius: width * 0.0225,
     borderWidth: 2,
     borderColor: '#F46F6F',
     alignItems: 'center',
@@ -275,36 +304,58 @@ const styles = StyleSheet.create({
   selectedRadio: {
     backgroundColor: '#F46F6F',
   },
+  radioText: {
+    marginLeft: width * 0.025,
+    fontSize: width * 0.04,
+  },
+  cutOffText: {
+    fontStyle: 'italic',
+    fontSize: width * 0.03,
+    marginTop: height * 0.005,
+    color: '#555',
+  },
   bottomButtons: {
-    marginTop: 30,
+    marginTop: height * 0.04,
     alignItems: 'center',
   },
   resultBox: {
-    marginTop: 30,
-    padding: 20,
+    marginTop: height * 0.04,
+    padding: width * 0.05,
     backgroundColor: '#f1f1f1',
-    borderRadius: 12,
+    borderRadius: width * 0.03,
   },
   resultTitle: {
-    fontSize: 18,
+    fontSize: width * 0.05,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: height * 0.015,
+  },
+  resultValueText: {
+    fontSize: width * 0.04,
+    marginBottom: height * 0.005,
+    color: '#333',
+  },
+  resultInterpretationText: {
+    fontSize: width * 0.04,
+    lineHeight: width * 0.055,
+    color: '#333',
   },
   saveButton: {
-    marginTop: 20,
+    marginTop: height * 0.025,
     backgroundColor: '#F46F6F',
-    paddingVertical: 10,
-    borderRadius: 8,
+    paddingVertical: height * 0.015,
+    borderRadius: width * 0.02,
     alignItems: 'center',
   },
   saveButtonText: {
     color: '#fff',
     fontWeight: 'bold',
+    fontSize: width * 0.04,
   },
-    linksRow: {
+  linksRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 15,
+    marginTop: height * 0.02,
     width: '100%',
+    paddingBottom: height * 0.04,
   },
 });
