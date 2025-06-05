@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'; 
 import { useRouter } from 'expo-router';
+
+const { height } = Dimensions.get('window'); 
 
 export default function WelcomeScreen() {
   const router = useRouter();
@@ -9,7 +11,7 @@ export default function WelcomeScreen() {
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
-          source={require('../assets/logo.png')} // ajuste se necessário
+          source={require('../assets/logo.png')}
           style={styles.logo}
           resizeMode="contain"
         />
@@ -33,36 +35,39 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    justifyContent: 'center',
-     paddingVertical: 40,
+    paddingVertical: height * 0.05, 
   },
   logoContainer: {
-    flex: 2,    
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   logo: {
-    width: 220,
-    height: 220,
+    width: height * 0.28, 
+    height: height * 0.28, 
+    maxHeight: 250, 
+    maxWidth: 250,
   },
   bottomBox: {
     backgroundColor: '#F46F6F',
     borderTopLeftRadius: 45,
     borderTopRightRadius: 45,
-    padding: 30,
-    
+    paddingHorizontal: 30, 
+    paddingVertical: height * 0.05, 
+    justifyContent: 'space-around', 
+    // flex: 1, //  flex: 1 aqui para ocupar o máximo possível do espaço restante.
   },
   description: {
     color: '#fff',
     fontSize: 16,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: height * 0.02, 
   },
   loginText: {
     color: '#fff',
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: height * 0.02, 
   },
   button: {
     backgroundColor: '#fff',
