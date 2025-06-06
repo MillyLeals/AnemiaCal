@@ -129,8 +129,8 @@ const styles = StyleSheet.create({
   },
   profileButton: {
     position: 'absolute',
-    top: Platform.OS === 'ios' ? height * 0.05 : height * 0.02, 
-    right: width * 0.05, 
+    top: Platform.OS === 'ios' ? height * 0.05 : height * 0.05, 
+    right: width * 0.06, 
     zIndex: 10,
   },
   welcomeText: {
