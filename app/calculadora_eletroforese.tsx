@@ -96,8 +96,8 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#F46F6F',
     height: Platform.OS === 'ios' ? height * 0.12 : height * 0.1,
-    borderBottomLeftRadius: width * 0.07,
-    borderBottomRightRadius: width * 0.07,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
     paddingTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.03,
     paddingHorizontal: width * 0.05,
     justifyContent: 'center',
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   backButtonPosition: {
     position: 'absolute',
     left: width * 0.05,
-    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.03,
+    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.03, 
     zIndex: 1,
   },
   headerTitle: {

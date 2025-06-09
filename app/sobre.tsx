@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   backButtonPosition: {
     position: 'absolute',
     left: width * 0.05,
-    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.04, 
+    top: Platform.OS === 'ios' ? height * 0.06 : height * 0.03, 
     zIndex: 1,
   },
   headerTitle: {

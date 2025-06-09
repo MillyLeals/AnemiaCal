@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#F46F6F',
     height: Platform.OS === 'ios' ? height * 0.12 : height * 0.1,
-    borderBottomLeftRadius: width * 0.07,
-    borderBottomRightRadius: width * 0.07,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
     paddingTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.03,
     paddingHorizontal: width * 0.05,
     justifyContent: 'center',
