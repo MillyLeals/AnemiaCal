@@ -12,7 +12,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 import { getAuth } from 'firebase/auth';
-import logo3 from '../assets/logo3.png';
+import logo3 from '../assets/3.png';
 
 const { width, height } = Dimensions.get('window'); 
 

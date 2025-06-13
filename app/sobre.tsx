@@ -20,7 +20,7 @@ export default function Sobre() {
       <ScrollView contentContainerStyle={styles.scrollContent} style={styles.scrollViewFlex}>
         <View style={styles.content}>
           <Text style={styles.paragraph}>
-            <Text style={styles.bold}>O AnemiaCal</Text> é um aplicativo desenvolvido para{' '}
+            <Text style={styles.bold}>O AnemiaCalc</Text> é um aplicativo desenvolvido para{' '}
             <Text style={styles.bold}>
               ajudar profissionais da saúde a diferenciar de forma prática e rápida a Anemia Ferropriva e Talassemias Menores
             </Text>, especialmente em pacientes com <Text style={styles.bold}>microcitose</Text>.
@@ -60,7 +60,7 @@ export default function Sobre() {
               <View style={styles.instructionBlock}>
                 <Text style={styles.sectionTitle}>🏠 Tela Home</Text>
                 <Text style={styles.instructionText}>
-                  A tela principal do AnemiaCal, onde você acessa todas as funcionalidades:
+                  A tela principal do AnemiaCalc, onde você acessa todas as funcionalidades:
                 </Text>
               </View>
 
