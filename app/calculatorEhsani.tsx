@@ -61,7 +61,7 @@ export default function CalculatorEhsani() {
         'Sugestivo de Anemia Ferropriva\n→ Indicar testes de metabolismo do ferro';
     } else if (ehsani < cutOffNum && rbcNum > 5) {
       interpretacao =
-        'Sugestivo de Talassemia Menor\n→ Indicar Eletroforese de Hemoglobina';
+        'Sugestivo de Talassemia Menor\n→ Indicar Eletroforese de Hemoglobina/HPLC';
     } else {
       interpretacao = 'Resultado inconclusivo. Avaliar com outros exames.';
     }

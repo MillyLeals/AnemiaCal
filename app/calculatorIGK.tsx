@@ -65,7 +65,7 @@ export default function CalculatorIGK() {
     if (igk > cutOff && rbcNum < 5) {
       interpretacao = 'Sugestivo de Anemia Ferropriva\n→ Indicar testes de metabolismo do ferro';
     } else if (igk <= cutOff && rbcNum > 5) {
-      interpretacao = 'Sugestivo de Talassemia Menor\n→ Indicar Eletroforese de Hemoglobina';
+      interpretacao = 'Sugestivo de Talassemia Menor\n→ Indicar Eletroforese de Hemoglobina/HPLC';
     } else {
       interpretacao = 'Resultado inconclusivo. Avaliar com outros exames.';
     }
